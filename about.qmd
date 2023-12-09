@@ -1,0 +1,94 @@
+---
+title: "Building Edtech for Mental Wellbeing"
+subtitle: "By Na & Avianna"
+---
+
+Throughout and in the aftermath of the COVID-19 pandemic, there has been a notable shift towards incorporating technology into education. While educational technology has increased accessibility and flexibility in uncertain times, there are potential consequences due to the inherent lack of social connection and physical activities in online learning. In this project, we aim to investigate this increasing prevalence of educational technology and their impact on the well-being of individuals within this evolving educational landscape. 
+
+# Research Questions 
+
+1. Is there any age group that is more negatively affected by COVID-19? 
+2. How do digital learning tools affect university students mental well being?
+3. Is there universality in terms of these elements?
+
+## Question 1
+
+```{r, message=F, include = F}
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(ggpubr)
+library(ggmosaic)
+```
+
+```{r, warning = F, include = F}
+colombia <- read_excel("DB WB students.xlsx") %>%
+  select(-c("1. During the process of collecting, typing and manipulating the data provided by you. These data will be used only for academic purposes and will be presented in an aggregated way. Given the above, are you willing to participate in this survey?", "2. What is your student code?")) %>%
+  mutate(age_cat = case_when(
+    `3. How old are you?` < 18 ~ "Under 18",
+    `3. How old are you?` >= 18 & `3. How old are you?` <= 22 ~ "18-22", 
+    `3. How old are you?` > 22 ~ '22+'
+)) %>%
+  mutate(age_cat = fct_relevel(age_cat, c("Under 18", "18-22", "22+"))) %>%
+  mutate(commu = case_when(
+    `13.5 How happy are you with:\r\nYour ability to communicate with others` >= 0 & `13.5 How happy are you with:\r\nYour ability to communicate with others` <=2 ~ "Very dissatisfied",
+    `13.5 How happy are you with:\r\nYour ability to communicate with others` >= 3 & `13.5 How happy are you with:\r\nYour ability to communicate with others` <= 4 ~ "Dissatisfied",
+    `13.5 How happy are you with:\r\nYour ability to communicate with others` >= 5 & `13.5 How happy are you with:\r\nYour ability to communicate with others` <= 6 ~ "Neutral",
+    `13.5 How happy are you with:\r\nYour ability to communicate with others` >= 7 & `13.5 How happy are you with:\r\nYour ability to communicate with others` <= 8 ~ "Satisfied",
+    `13.5 How happy are you with:\r\nYour ability to communicate with others` >= 8 ~ "Very Satisfied"
+)) %>%
+  mutate(commu = fct_relevel(commu, c("Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"))) %>%
+  mutate(onl_class = case_when(
+    `11.19 I am comfortable with the online classes.` >= 0 & `11.19 I am comfortable with the online classes.` <=2 ~ "Very low comfortability",
+    `11.19 I am comfortable with the online classes.` >= 3 & `11.19 I am comfortable with the online classes.` <= 4 ~ "Low comfortability",
+    `11.19 I am comfortable with the online classes.` >= 5 & `11.19 I am comfortable with the online classes.` <= 6 ~ "Neutral",
+    `11.19 I am comfortable with the online classes.` >= 7 & `11.19 I am comfortable with the online classes.` <= 8 ~ "High comfortability",
+    `11.19 I am comfortable with the online classes.` >= 8 ~ "Very high comfortability"
+)) %>%
+  mutate(onl_class = fct_relevel(onl_class, c("Very low comfortability", "Low comfortability", "Neutral", "High comfortability", "Very high comfortability"))) 
+```
+
+```{r, include = F}
+delhi_palette_1 <- c("#621713", "#efe5e3", "#aabf67")
+delhi_palette_2 <- c("#621713", "#aabf67")
+
+theme_customization_a = 
+  theme(text = element_text(size = 10, hjust = 0.5, family = "serif"),
+        plot.title = element_text(size = 10, hjust = 0.5, face = "bold"))
+
+theme_customization_b = 
+  theme(plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(size = 10, hjust = 0.5, face = "italic"),
+        text = element_text(size = 10, hjust = 0.5, family = "serif"))
+```
+
+
+```{r, echo=FALSE}
+colombia_age_plot <- function(fill_var, fill_title) {
+  colombia %>%
+    ggplot(aes(x = age_cat, y = {{fill_var}})) +
+    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
+    geom_boxplot(fill = "#de5d83", width = 0.3) +
+    labs(x = 'Age Group', y = 'Score', title = fill_title) + 
+    theme_classic() +
+    theme_customization_a
+}
+
+c1 <- colombia_age_plot(`11.19 I am comfortable with the online classes.`, "Online Class Comfortability") +
+   theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+         axis.line.x = element_blank(), axis.ticks.x = element_blank())
+
+c2 <- colombia_age_plot(`13.6 How happy are you with:\r\nYour health overall`, "Health Satisfaction") +
+    theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+          axis.line.x = element_blank(), axis.ticks.x = element_blank())
+
+c3 <- colombia_age_plot(`14.5 How stressed are you with:\r\nThe lack of time`, "Time Management Stress")
+
+c4 <- colombia_age_plot(`13.5 How happy are you with:\r\nYour ability to communicate with others`, "Good Social Communication")
+
+colombia_age_plot <- ggarrange(c1, c2, c3, c4, nrow = 2, ncol = 2)
+
+annotate_figure(colombia_age_plot,
+      top = text_grob("COVID-19 Education Responses by Age Group in Colombia", 
+              size = 14, face = "bold", family = "serif")) 
+```

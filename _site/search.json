@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Building Edtech for Mental Wellbeing",
+    "section": "",
+    "text": "Throughout and in the aftermath of the COVID-19 pandemic, there has been a notable shift towards incorporating technology into education. While educational technology has increased accessibility and flexibility in uncertain times, there are potential consequences due to the inherent lack of social connection and physical activities in online learning. In this project, we aim to investigate this increasing prevalence of educational technology and their impact on the well-being of individuals within this evolving educational landscape."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Final Project",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "about.html#question-1",
+    "href": "about.html#question-1",
+    "title": "Building Edtech for Mental Wellbeing",
+    "section": "Question 1",
+    "text": "Question 1"
+  }
+]
