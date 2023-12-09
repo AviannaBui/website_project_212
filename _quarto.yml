@@ -9,7 +9,7 @@ website:
         text: Project
 format:
   html:
-    theme: cerulean
+    theme: solar
     css: styles.css
     toc: true
 

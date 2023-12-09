@@ -22,7 +22,7 @@ library(ggmosaic)
 ```
 
 ```{r, warning = F, include = F}
-colombia <- read_excel("DB WB students.xlsx") %>%
+colombia <- read_excel("colom.xlsx") %>%
   select(-c("1. During the process of collecting, typing and manipulating the data provided by you. These data will be used only for academic purposes and will be presented in an aggregated way. Given the above, are you willing to participate in this survey?", "2. What is your student code?")) %>%
   mutate(age_cat = case_when(
     `3. How old are you?` < 18 ~ "Under 18",
