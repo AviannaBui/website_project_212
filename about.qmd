@@ -7,11 +7,13 @@ Throughout and in the aftermath of the COVID-19 pandemic, there has been a notab
 
 # Research Questions 
 
-1. Is there any age group that is more negatively affected by COVID-19? 
-2. How do digital learning tools affect university students mental well being?
-3. Is there universality in terms of these elements?
+To examine the impact of educational technological tools on students' well-being, we explore three questions:
 
-## Question 1
+  1. Is there any age group that is more negatively affected by COVID-19? 
+  2. How do digital learning tools affect university students mental well being?
+  3. Is there universality in terms of these elements?
+
+## Question 1: Which age group is most heavily impacted?
 
 ```{r, message=F, include = F}
 library(tidyverse)
@@ -21,8 +23,37 @@ library(ggpubr)
 library(ggmosaic)
 ```
 
+```{r, message = F, warning = F, include = F}
+delhi <- read_csv("./data/delhi_data.csv") %>%
+  drop_na(`Rating of Online Class experience`) %>%
+  filter(`Time spent on Online Class` > 0) %>%
+  mutate(age_cat = case_when(
+    `Age of Subject` < 18 ~ "Under 18",
+    `Age of Subject` >= 18 & `Age of Subject` <= 22 ~ "18-22", 
+    `Age of Subject` > 22 ~ '22+'
+)) %>%
+  mutate(age_cat = fct_relevel(age_cat, c("Under 18", "18-22", "22+"))) %>%
+    mutate(time_online = case_when(
+    `Time spent on Online Class` < 2 ~ "0-2",
+    `Time spent on Online Class` >= 2 & `Time spent on Online Class` < 4 ~ "2-4",
+    `Time spent on Online Class` >= 4 & `Time spent on Online Class` < 7 ~ "4-7",
+    `Time spent on Online Class` >= 7 ~ 'Over 7'
+)) %>%
+  mutate(new_rating = case_when(
+    `Rating of Online Class experience` == "Excellent" | `Rating of Online Class experience` == "Good" ~ "Positive",
+    `Rating of Online Class experience` == "Poor" | `Rating of Online Class experience` == "Very poor" ~ "Negative", 
+    `Rating of Online Class experience` == "Average" ~ 'Neutral'
+)) %>%
+    mutate(social = factor(`Do you find yourself more connected with your family, close friends , relatives  ?`)) %>%
+    mutate(health = factor(`Health issue during lockdown`)) 
+
+delhi_college <- delhi %>%
+    filter(age_cat == "18-22") 
+```
+
+
 ```{r, warning = F, include = F}
-colombia <- read_excel("colom.xlsx") %>%
+colombia <- read_excel("./data/colom.xlsx") %>%
   select(-c("1. During the process of collecting, typing and manipulating the data provided by you. These data will be used only for academic purposes and will be presented in an aggregated way. Given the above, are you willing to participate in this survey?", "2. What is your student code?")) %>%
   mutate(age_cat = case_when(
     `3. How old are you?` < 18 ~ "Under 18",
@@ -62,6 +93,46 @@ theme_customization_b =
         text = element_text(size = 10, hjust = 0.5, family = "serif"))
 ```
 
+To investigate which age group is most heavily affected by the transition to online learning, we compare the reported comfortability with online class, state of wellness, efficiency with time utilization, and perceived social connection across different age groups. 
+
+It is apparent that college-aged students (aged 18 to 22) report the greatest negative impact with their online learning experience. They reported a negative experience during COVID-19 learning at over double the proportion of the other two age groups, and are also much less likely to have a positive experience with online class. These students also reported more health issues, less efficient time utilization, and worse social connection. 
+
+```{r, echo = FALSE}
+delhi_age_plot <- function(fill_var, fill_label, plt_title, pal, legend_pos) {
+  delhi %>%
+    ggplot(aes(x = age_cat, fill = {{fill_var}})) +
+    geom_bar(position = "fill") +
+    labs(x = 'Age Group', y = 'Proportion', fill = fill_label, title = plt_title) + 
+    scale_fill_manual(values = pal) +
+    theme_classic() +
+    theme(legend.position = legend_pos) +
+    theme_customization_a
+}
+
+p1 <- delhi_age_plot(new_rating, "Class Rating", "Online Class Rating", delhi_palette_1, "bottom") +
+    theme(axis.title.x = element_blank(), axis.text.x = element_blank(),
+          axis.line.x = element_blank(), axis.ticks.x = element_blank())
+
+p2 <- delhi_age_plot(`Health issue during lockdown`, "Others", "Health Issue", delhi_palette_2, "bottom") +
+    theme(axis.title = element_blank(), axis.text = element_blank(),
+          axis.line = element_blank(), axis.ticks = element_blank())
+
+p3 <- delhi_age_plot(`Time utilized`, "", "Time Utilized", delhi_palette_2, "none")
+
+p4 <- delhi_age_plot(`Do you find yourself more connected with your family, close friends , relatives  ?`, "", "Improved Social Connection", delhi_palette_2, "none") +
+   theme(axis.title.y = element_blank(), axis.text.y = element_blank(),
+         axis.line.y = element_blank(), axis.ticks.y = element_blank())
+
+delhi_age_plot <- ggarrange(p1, p2, p3, p4, nrow = 2, ncol = 2)
+
+annotate_figure(
+      annotate_figure(delhi_age_plot, top = text_grob("Green = positive/yes, Red = negative/no, White = neutral", size = 8, face = "italic", family = "serif")),
+      top = text_grob("COVID-19 Education Responses by Age Group in Delhi", 
+              size = 14, face = "bold", 
+              family = "serif"))
+```
+
+When it comes to Colombian students, college-aged students remain more negatively impacted by the transition to online learning compared to students of different age groups. In particular, they have a lower median score regarding their comfortability with online class. While the median score for all age groups across the other 3 categories are comparable, college students are more likely to report a lower score for their health satisfaction and social connection, as well as higher stress with time management. 
 
 ```{r, echo=FALSE}
 colombia_age_plot <- function(fill_var, fill_title) {
@@ -92,3 +163,13 @@ annotate_figure(colombia_age_plot,
       top = text_grob("COVID-19 Education Responses by Age Group in Colombia", 
               size = 14, face = "bold", family = "serif")) 
 ```
+
+## Question 2
+
+## Question 3
+
+# Limitations & Ethical Considerations
+
+# Conclusion
+
+
