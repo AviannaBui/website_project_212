@@ -9,7 +9,7 @@ website:
         text: Project
 format:
   html:
-    theme: solar
+    theme: lux
     css: styles.css
     toc: true
 

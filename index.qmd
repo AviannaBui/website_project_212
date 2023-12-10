@@ -1,6 +1,5 @@
 ---
 title: "Project Overview"
-subtitle: "By Na & Avianna"
 ---
 
 This is a data science project made by Na Nguyen '25 and Avianna Bui '25 at Macalester College for COMP 212: Intermediate Data Science course. 
