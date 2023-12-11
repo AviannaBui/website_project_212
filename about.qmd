@@ -3,9 +3,7 @@ title: "Building Edtech for Mental Wellbeing"
 subtitle: "By Na & Avianna"
 ---
 
-Throughout and in the aftermath of the COVID-19 pandemic, there has been a notable shift towards incorporating technology into education. While educational technology has increased accessibility and flexibility in uncertain times, there are potential consequences due to the inherent lack of social connection and physical activities in online learning. In this project, we aim to investigate this increasing prevalence of educational technology and their impact on the well-being of individuals within this evolving educational landscape. 
-
-# Research Questions 
+## Research Questions 
 
 To examine the impact of educational technological tools on students' well-being, we explore three questions:
 
@@ -13,7 +11,7 @@ To examine the impact of educational technological tools on students' well-being
   2. How do digital learning tools affect university students mental well being?
   3. Is there universality in terms of these elements?
 
-## Question 1: Which age group is most heavily impacted?
+### Question 1: Which age group is most heavily impacted?
 
 ```{r, message=F, include = F}
 library(tidyverse)
@@ -295,9 +293,9 @@ annotate_figure(plot_grid(agegroupAnalysis_jordan, legend,ncol=1,rel_heights = c
                   
 ```
 
-## Question 2: How do digital learning tools affect university students mental well being?
+### Question 2: How do digital learning tools affect university students mental well being?
 
-### a. Time On Online Learning vs. Well-being (no data from Colombia)
+#### a. Time On Online Learning vs. Well-being (no data from Colombia)
 
 Contrary to our hypothesis, there is a negative relationship between the number of hours Delhi college students spent online and reported health issue. Among college students that did report health problems, most spent under 4 hours for online learning. 
 
@@ -378,7 +376,7 @@ test3 %>%
 
 ```
 
-### b. Social Connection vs. Well-being 
+#### b. Social Connection vs. Well-being 
 
 ```{r, warning = FALSE, echo = FALSE}
 delhi_college %>%
@@ -432,7 +430,7 @@ jordan_uni_mentalHealth %>%
         plot.subtitle =element_text(size = 10, hjust = 0.5))
 ```
 
-### C. Comfortability with Online Class vs. Well-being 
+#### c. Comfortability with Online Class vs. Well-being 
 
 ```{r, warning = FALSE, echo = FALSE}
 comfort_filtered <- function(data, comfort_var, mh_var, comfort_var_resp,  mh_var_resp) {
@@ -500,10 +498,10 @@ colombia %>%
     theme_customization_b
 ```
 
-## Question 3: Is there universality across countries?
+### Question 3: Is there universality across countries?
 
-# Limitations & Ethical Considerations
+## Limitations & Ethical Considerations
 
-# Conclusion
+## Conclusion
 
 
