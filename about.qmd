@@ -490,7 +490,7 @@ ggplot() +
   theme_customization_b
 ```
 
-```{r}
+```{r, echo = FALSE}
 colombia %>%
   ggplot(aes(x = onl_class, y = `13.6 How happy are you with:\r\nYour health overall`)) +
     ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
