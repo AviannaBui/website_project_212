@@ -6,6 +6,8 @@ website:
   title: "Final Project"
   navbar:
     left:
+      - href: index.qmd
+        text: Abstract
       - href: about.qmd
         text: Project
 format:
