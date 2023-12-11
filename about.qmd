@@ -21,6 +21,8 @@ library(ggplot2)
 library(readxl)
 library(ggpubr)
 library(ggmosaic)
+library(gridExtra)
+library(cowplot)
 ```
 
 ```{r, message = F, warning = F, include = F}
@@ -78,6 +80,71 @@ colombia <- read_excel("./data/colom.xlsx") %>%
 )) %>%
   mutate(onl_class = fct_relevel(onl_class, c("Very low comfortability", "Low comfortability", "Neutral", "High comfortability", "Very high comfortability"))) 
 ```
+
+
+```{r, include = F}
+# Read data
+jordan_uni_mentalHealth <- read_csv("data/jordan-covid-mentalhealth.csv")
+
+#Online class comfortability and Age Group
+
+age_factored <- factor(c("18-24","25-30", "+30"))
+
+agegroup_plot1 <- jordan_uni_mentalHealth %>% 
+  mutate(onlineclass_comfortability = `Taking quizzes and exams online from home was not comfortable and made me nervous.`) %>% 
+  mutate(onlineclass_comfortability = case_when(
+    onlineclass_comfortability == "Agree" | onlineclass_comfortability == "Strongly Agree" ~ "Yes",
+    onlineclass_comfortability == "Disagree" | onlineclass_comfortability == "Disagree" ~ "No",
+  )) %>% 
+  mutate(Age = factor(Age, age_factored)) %>% 
+  filter(!is.na(onlineclass_comfortability)) %>% 
+  ggplot(aes(x = Age, fill = onlineclass_comfortability)) +
+  geom_bar( position = "fill") +scale_fill_manual(values = c( "steelblue4", "#FF8F05") )
+
+# Social connection and Age group
+
+agegroup_plot4 <- jordan_uni_mentalHealth %>% 
+  mutate(onlineclass_connectivity = `The distance learning system, caused by the COVID-19 epidemic, resulted in social distancing.`) %>% 
+  mutate(onlineclass_connectivity = case_when(
+    onlineclass_connectivity == "Agree" | onlineclass_connectivity == "Strongly Agree" ~ "Yes",
+    onlineclass_connectivity == "Disagree" | onlineclass_connectivity == "Disagree" ~ "No",
+  )) %>% 
+  mutate(Age = factor(Age, age_factored)) %>% 
+  filter(!is.na(onlineclass_connectivity)) %>% 
+  ggplot(aes(x = Age, fill = onlineclass_connectivity)) +
+  geom_bar( position = "fill") +
+  scale_fill_manual(values = c( "steelblue4", "#FF8F05")) 
+
+# Time management
+
+agegroup_plot3 <- jordan_uni_mentalHealth %>% 
+  mutate(onlineclass_timemanagement = `After COVID-19: I have fixed hours for bedtime and wake-up.`) %>% 
+  mutate(onlineclass_timemanagement = case_when(
+    onlineclass_timemanagement == "Agree" | onlineclass_timemanagement == "Strongly Agree" ~ "Yes",
+    onlineclass_timemanagement == "Disagree" | onlineclass_timemanagement == "Disagree" ~ "No",
+  )) %>% 
+  mutate(Age = factor(Age, age_factored)) %>% 
+  filter(!is.na(onlineclass_timemanagement)) %>% 
+  ggplot(aes(x = Age, fill = onlineclass_timemanagement)) +
+  geom_bar( position = "fill") +
+  scale_fill_manual(values = c( "steelblue4", "#FF8F05")) 
+
+# Health issues
+
+agegroup_plot2 <- jordan_uni_mentalHealth %>% 
+  mutate(onlineclass_healthissues = `Measures of lockdown, closures, and quarantine, brought by COVID-19 caused stress, frustration, and depression.`) %>% 
+  mutate(onlineclass_healthissues = case_when(
+    onlineclass_healthissues == "Agree" | onlineclass_healthissues == "Strongly Agree" ~ "Yes",
+    onlineclass_healthissues == "Disagree" | onlineclass_healthissues == "Disagree" ~ "No",
+  )) %>% 
+  mutate(Age = factor(Age, age_factored)) %>% 
+  filter(!is.na(onlineclass_healthissues)) %>% 
+  ggplot(aes(x = Age, fill = onlineclass_healthissues)) +
+  geom_bar( position = "fill") +
+  scale_fill_manual(values = c( "steelblue4", "#FF8F05")) 
+
+```
+
 
 ```{r, include = F}
 delhi_palette_1 <- c("#621713", "#efe5e3", "#aabf67")
@@ -164,7 +231,139 @@ annotate_figure(colombia_age_plot,
               size = 14, face = "bold", family = "serif")) 
 ```
 
+```{r, echo = FALSE}
+agegroupAnalysis_jordan <- cowplot::plot_grid( 
+                  agegroup_plot1 + 
+                        theme(axis.text.x = element_text(family = "serif"),
+                              axis.text.y = element_text(family = "serif"),
+                              axis.title.y = element_blank(),
+                              axis.title.x = element_blank(),
+                              legend.position = "none",
+                              plot.title = element_text(hjust = 0.5, face = "bold", family = "serif")) +
+                        labs(title = "Online class comfortability"),
+                   agegroup_plot2 +
+                        theme(axis.text.x = element_text(family = "serif"),
+                              axis.text.y = element_text(family = "serif"),
+                              axis.ticks.y = element_blank(),
+                              axis.title.y = element_blank(),
+                              axis.title.x = element_blank(),
+                              legend.position = "none",
+                              plot.title = element_text(hjust = 0.5,face = "bold", family = "serif"),
+                              )+
+                        labs(title = "Mental Health issues"), 
+                  agegroup_plot3 + 
+                        theme(axis.text.x = element_text(family = "serif"),
+                              axis.text.y = element_text(family = "serif"),
+                              axis.ticks.y = element_blank(),
+                              axis.title.y = element_blank(),
+                              axis.title.x = element_blank(),
+                              legend.position = "none",
+                              plot.title = element_text(hjust = 0.5, face = "bold", family = "serif")
+           )+
+                        labs(title = "Time management"),
+                   agegroup_plot4 + 
+                        theme(axis.text.x = element_text(family = "serif"),
+                              axis.text.y = element_text(family = "serif"),
+                              axis.ticks.y = element_blank(),
+                              axis.title.y = element_blank(),
+                              axis.title.x = element_blank(),
+                              legend.position = "none",
+                              plot.title = element_text(hjust = 0.5, face = "bold", family = "serif"),
+                             )+
+                          labs(title = "Social connection"),
+                   nrow = 2,
+                  rel_heights = c(1.5,1.5)
+          
+                  )
+# extract legend from plot1 
+legend <- get_legend( 
+  agegroup_plot1 +
+  theme_classic() +
+    theme(plot.title = element_text(hjust = 0.5, face = "bold", family = "serif")) +
+    guides(color = guide_legend(nrow = 1)) + 
+    theme(legend.position = "bottom",
+          ) +
+  labs(fill = "Rating")
+) 
+
+
+
+# Combine combined plot and legend using plot_grid() 
+annotate_figure(plot_grid(agegroupAnalysis_jordan, legend,ncol=1,rel_heights = c(1, .1)), top = text_grob("COVID-19 Education Responses by Age Group in Columbia", 
+              size = 14, face = "bold", 
+              family = "serif"))
+                  
+```
+
 ## Question 2
+
+```{r, include = F}
+
+hours_factored <- factor(c("1-3","3-6","6-9","9-12","+12"))
+
+# Create a new row
+new_row <- data.frame(b4_covid_exhaustion_screens = "Agree", b4covid_techuse = "+12", `Before COVID-19` = 0)
+
+new_row <- new_row %>%  
+  mutate(`Before COVID-19` = 0) %>% 
+  select(b4_covid_exhaustion_screens, b4covid_techuse, `Before COVID-19`)
+
+beforecovid_data <- jordan_uni_mentalHealth %>%
+  mutate(covid_techuse = factor(`Before COVID-19: How much time do you spend using the digital tools in learning?`,hours_factored)) %>% 
+  mutate(covid_exhaustion_screens = 
+    `Before COVID-19: Continuous exposure to electronic screens in online learning is tiring and exhausting`
+    ) %>% 
+  count(covid_exhaustion_screens, covid_techuse) %>% 
+  group_by(covid_techuse) %>% 
+  mutate(`Before COVID-19` = n /sum(n))
+
+aftercovid_data<- jordan_uni_mentalHealth %>%
+  mutate(covid_techuse = factor(`After COVID-19: How much time do you spend using the digital tools in learning?`,hours_factored)) %>% 
+  mutate(covid_exhaustion_screens = 
+    `After COVID-19: Continuous exposure to electronic screens in online learning is tiring and exhausting`
+    ) %>% 
+  count(covid_exhaustion_screens, covid_techuse) %>%  # Count occurrences within groups
+  group_by(covid_techuse) %>%
+  mutate(`After COVID-19` = n / sum(n))
+  
+
+test3 <- full_join(beforecovid_data, aftercovid_data, by = c("covid_techuse", "covid_exhaustion_screens")) %>%  select(covid_exhaustion_screens, covid_techuse, `Before COVID-19`, `After COVID-19`)
+
+```
+
+```{r, echo= FALSE, warning= FALSE }
+test3<- test3 %>% 
+  pivot_longer(cols = 3:4, names_to = "state", values_to = "Frequency") %>%
+  mutate(state = factor(state, levels = c("Before COVID-19", "After COVID-19")))
+
+
+
+test3 %>% 
+   mutate(covid_exhaustion_screens = case_when(
+    covid_exhaustion_screens == "Agree" | covid_exhaustion_screens == "Strongly Agree" ~ "YES",
+    covid_exhaustion_screens == "Disagree" | covid_exhaustion_screens == "Disagree" ~ "NO",
+  )) %>% 
+  filter(!is.na(covid_exhaustion_screens)) %>% 
+  ggplot()+
+  geom_point(aes(y = factor(covid_exhaustion_screens, c("NO", "YES")), x = covid_techuse, size = Frequency), color ="#FF8F05") +
+  facet_grid(.~state)+
+  theme_bw()+
+  labs( title = "Do Jordan college students agree that digital learning tools cause exhaustion?",
+        x = "Average daily digital use (hours)"
+  )+
+  theme(axis.text.y = element_text(family = "serif"),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(family = "serif"),
+        axis.title.x = element_text(family = "serif"),
+        legend.title = element_text(family = "serif"),
+        legend.text = element_text(family = "serif"),
+        plot.title = element_text(face = "bold",  hjust = 0.5, family = "serif"))+ 
+  scale_size(range = c(0,9) , breaks = seq(0.0, 0.8,by = 0.2)) +
+  guides(alpha = FALSE) 
+
+```
+
+
 
 ## Question 3
 
