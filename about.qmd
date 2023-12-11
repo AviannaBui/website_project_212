@@ -329,14 +329,14 @@ aftercovid_data<- jordan_uni_mentalHealth %>%
 
 test3 <- full_join(beforecovid_data, aftercovid_data, by = c("covid_techuse", "covid_exhaustion_screens")) %>%  select(covid_exhaustion_screens, covid_techuse, `Before COVID-19`, `After COVID-19`)
 
-```
-
-```{r, echo= FALSE, warning= FALSE }
 test3<- test3 %>% 
   pivot_longer(cols = 3:4, names_to = "state", values_to = "Frequency") %>%
   mutate(state = factor(state, levels = c("Before COVID-19", "After COVID-19")))
 
 
+```
+
+```{r, echo= FALSE, warning= FALSE }
 
 test3 %>% 
    mutate(covid_exhaustion_screens = case_when(
@@ -362,6 +362,37 @@ test3 %>%
   guides(alpha = FALSE) 
 
 ```
+
+```{r, echo = FALSE, warning = FALSE}
+jordan_uni_mentalHealth %>%
+  mutate(onlineclass_connectivity = `Prolonged use of digital tools (mobile, laptop, i-pad) causes students’ isolation`) %>%
+  mutate(onlineclass_healthissues = `Measures of lockdown, closures, and quarantine, brought by COVID-19 caused stress, frustration, and depression.`) %>%
+  mutate(onlineclass_connectivity = factor(case_when(
+    onlineclass_connectivity == "Agree" | onlineclass_connectivity == "Strongly Agree" ~ "Yes",
+    onlineclass_connectivity == "Disagree" | onlineclass_connectivity == "Disagree" ~ "No",
+    ), c("No", "Yes"))
+  )%>% 
+  mutate(onlineclass_healthissues = factor(case_when(
+    onlineclass_healthissues == "Agree" | onlineclass_healthissues == "Strongly Agree" ~ "Yes",
+    onlineclass_healthissues == "Disagree" | onlineclass_healthissues == "Disagree" ~ "No",
+        ), c("No", "Yes")
+  )
+  )%>%
+  filter(!is.na(onlineclass_connectivity)) %>%
+  filter(!is.na(onlineclass_healthissues)) %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(onlineclass_healthissues), fill = onlineclass_connectivity))+
+  theme_minimal() +
+  scale_fill_manual(values = c( "steelblue4","#FF8F05")) +
+  labs( x = "Mental Health Issues",
+        y = "Increased Isolation",
+        fill = "Rating",
+        title = "Increased Isolation Due To Online Class versus Mental Health Issues Rating",
+        subtitle = "In Jordan University Students") +
+  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle =element_text(size = 10, hjust = 0.5))
+```
+
 
 
 
