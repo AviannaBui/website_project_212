@@ -390,6 +390,8 @@ test3 %>%
 
 #### 2. Social Connection
 
+For Delhi college students, there is a higher percentage of reported health problems among students with worsened social bonds compared to those reporting improved social connection. Interestingly, the majority of Delhi college students reported improvement in their level of social connection. 
+
 ```{r, warning = FALSE, echo = FALSE}
 delhi_college %>%
    ggplot() +
@@ -399,6 +401,18 @@ delhi_college %>%
     scale_fill_manual(values = c("#621713", "#aabf67")) +
     theme_classic() +
     theme(legend.position = "bottom") +
+    theme_customization_b
+```
+
+Colombian college students who are either satisfied or very satisfied with their social communication demonstrate higher median scores for their health rating compared to students with worsened or experience no changes in their social communication satisfaction level. When we look at the distribution, it is notable that students who are highly satisfied with their social communication are more likely to rate a 10, the highest score, for their health satisfaction rating.
+
+```{r, warning = F, echo = FALSE}
+colombia %>%
+  ggplot(aes(x = commu, y = `13.6 How happy are you with:\r\nYour health overall`)) +
+    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
+    geom_boxplot(fill = "#de5d83", width = 0.2) +
+    labs(x = 'Satisfaction with Social Communication', y = 'Health Satisfaction Rating', title = 'Correlation between Good Social Communication and Well-being in Colombian Students') + 
+    theme_classic() +
     theme_customization_b
 ```
 
@@ -438,17 +452,11 @@ jordan_uni_mentalHealth %>%
   annotate(geom = "label", x = 0.5, y = 0.5, label = "92.98%")
 ```
 
-```{r, warning = F, echo = FALSE}
-colombia %>%
-  ggplot(aes(x = commu, y = `13.6 How happy are you with:\r\nYour health overall`)) +
-    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
-    geom_boxplot(fill = "#de5d83", width = 0.2) +
-    labs(x = 'Satisfaction with Social Communication', y = 'Health Satisfaction Rating', title = 'Correlation between Good Social Communication and Well-being in Colombian Students') + 
-    theme_classic() +
-    theme_customization_b
-```
 
 #### 3. Online Class Comfortability
+
+For this question, we create a confusion matrix with each dot representing one case of college student. Regardless of health problems, the majority of Delhi college students report a negative experience with online learning during COVID-19. Among those with reported health issue, the proportion of students with negative online class rating are around 2 times and 5 times higher than that with neutral and positive online learning experience, respectively. 
+
 
 ```{r, warning = FALSE, echo = FALSE}
 comfort_filtered <- function(data, comfort_var, mh_var, comfort_var_resp,  mh_var_resp) {
@@ -506,6 +514,17 @@ ggplot() +
   theme_customization_b
 ```
 
+With regard to the Colombian student dataset, college students with higher comfortability level with online class also give higher median scores for their rated well-being compared to the other groups. Students who are not comfortable or ambivalent about online class are also more likely to report a low score (0 to 2) for their health satisfaction level. 
+
+```{r, echo = FALSE}
+colombia %>%
+  ggplot(aes(x = onl_class, y = `13.6 How happy are you with:\r\nYour health overall`)) +
+    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
+    geom_boxplot(fill = "#de5d83", width = 0.2) +
+    labs(x = 'Online Class Comfortability', y = 'Health Satisfaction Rating', title = 'Correlation between Online Class Comfortability and Well-being in Colombian Students') + 
+    theme_classic() +
+    theme_customization_b
+```
 
 
 ```{r, warning = FALSE, echo = FALSE}
@@ -588,19 +607,15 @@ ggplot() +
         ) 
 ```
 
-```{r, echo = FALSE}
-colombia %>%
-  ggplot(aes(x = onl_class, y = `13.6 How happy are you with:\r\nYour health overall`)) +
-    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
-    geom_boxplot(fill = "#de5d83", width = 0.2) +
-    labs(x = 'Online Class Comfortability', y = 'Health Satisfaction Rating', title = 'Correlation between Online Class Comfortability and Well-being in Colombian Students') + 
-    theme_classic() +
-    theme_customization_b
-```
-
 ### Question 3: Is there universality across the datasets?
 
+## Future Directions
 
 ## Limitations & Ethical Considerations
+
+All datasets utilize a survey format, which is highly subjective and might lead to unreliable results. In addition, due to the cross-sectional design, we are unable to infer the causal impact and changes over time when it comes to the relationship between edtech and mental well-being. 
+
+More importantly, the students participating in these surveys are not representative of the wider student populations in these three countries. First, some survey questions ignore the experiences of students from marginalized communities e.g. the Jordanian and Colombian datasets only recorded binary gender in their questionnaire, effectively excluding those identifying as non-binary or just not subscribing to a binary gender framework. Second, since the surveys are collected online, students from disadvantaged socioeconomic backgrounds with no or unreliable access to Internet or online learning tools are either excluded or not well-represented in these results. However, it is these individuals that are more susceptible to both physical and mental health risks during the COVID-19 pandemic and are more likely to struggle with the transition to online learning. For that reason, we need to be mindful and inclusive of the perspectives of students without access to a platform to share their experiences when advocating for their educational needs and designing a more accessible and considerate online learning tools and environment. 
+
 
 ## Conclusion

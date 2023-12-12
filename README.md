@@ -1,1 +1,5 @@
 # Building Edtech for Mental Wellbeing
+
+*This is a data science project created by Na Nguyen '25 and Avianna Bui '25 at Macalester College for COMP 212: Intermediate Data Science course in Fall 2023 semester. For more details on the project, visit our project website at https://aviannabui.github.io/website_project_212/.*
+
+Throughout and in the aftermath of the COVID-19 pandemic, there has been a notable shift towards incorporating technology into education. While educational technology has increased accessibility and flexibility in uncertain times, there are potential consequences due to the inherent lack of social connection and physical activities in online learning. In this project, we aim to investigate this increasing prevalence of educational technology and their impact on the well-being of individuals within this evolving educational landscape. 
