@@ -120,8 +120,8 @@ agegroup_plot4 <- jordan_uni_mentalHealth %>%
 agegroup_plot3 <- jordan_uni_mentalHealth %>% 
   mutate(onlineclass_timemanagement = `After COVID-19: I have fixed hours for bedtime and wake-up.`) %>% 
   mutate(onlineclass_timemanagement = case_when(
-    onlineclass_timemanagement == "Agree" | onlineclass_timemanagement == "Strongly Agree" ~ "Yes",
-    onlineclass_timemanagement == "Disagree" | onlineclass_timemanagement == "Disagree" ~ "No",
+    onlineclass_timemanagement == "Agree" | onlineclass_timemanagement == "Strongly Agree" ~ "No",
+    onlineclass_timemanagement == "Disagree" | onlineclass_timemanagement == "Disagree" ~ "Yes",
   )) %>% 
   mutate(Age = factor(Age, age_factored)) %>% 
   filter(!is.na(onlineclass_timemanagement)) %>% 
@@ -162,7 +162,7 @@ theme_customization_b =
 
 To investigate which age group is most heavily affected by the transition to online learning, we compare the reported comfortability with online class, state of wellness, efficiency with time utilization, and perceived social connection across different age groups. 
 
-It is apparent that college-aged students (aged 18 to 22) report the greatest negative impact with their online learning experience. They reported a negative experience during COVID-19 learning at over double the proportion of the other two age groups, and are also much less likely to have a positive experience with online class. These students also reported more health issues, less efficient time utilization, and worse social connection. 
+It is apparent that Delhi college-aged students (aged 18 to 22) report the greatest negative impact with their online learning experience. They reported a negative experience during COVID-19 learning at over double the proportion of the other two age groups, and are also much less likely to have a positive experience with online class. These students also reported more health issues, less efficient time utilization, and worse social connection. 
 
 ```{r, echo = FALSE}
 delhi_age_plot <- function(fill_var, fill_label, plt_title, pal, legend_pos) {
@@ -231,16 +231,18 @@ annotate_figure(colombia_age_plot,
               size = 14, face = "bold", family = "serif")) 
 ```
 
+Similarly, the 18-24 year-old age group in the Jordan University dataset ranks the highest in terms of proportion for 4 out of 4 categories. More specifically, around 80-90% of the 18-24 year-old Jordan University students reported with mental health issues and lowered connection with others during COVID-19 while being nervous and uncomfortable with taking quizzes and exams online from home. Furthermore, more than half of the 18-24 year-old population claimed that they did not have fixed bedtime and wake-up hours during COVID-19, as opposed to only 40% of their 25-30 year-old counterparts and 30% of those who are 30+ years old. 
+
 ```{r, echo = FALSE}
 agegroupAnalysis_jordan <- cowplot::plot_grid( 
                   agegroup_plot1 + 
                         theme(axis.text.x = element_text(family = "serif"),
                               axis.text.y = element_text(family = "serif"),
-                              axis.title.y = element_blank(),
-                              axis.title.x = element_blank(),
+                              axis.title.x = element_blank(),                              axis.title.y = element_text(family = "serif"),
                               legend.position = "none",
                               plot.title = element_text(hjust = 0.5, face = "bold", family = "serif")) +
-                        labs(title = "Online class comfortability"),
+                        labs(title = "Online Class Discomfort",
+                             y = "Proportion"),
                    agegroup_plot2 +
                         theme(axis.text.x = element_text(family = "serif"),
                               axis.text.y = element_text(family = "serif"),
@@ -250,17 +252,18 @@ agegroupAnalysis_jordan <- cowplot::plot_grid(
                               legend.position = "none",
                               plot.title = element_text(hjust = 0.5,face = "bold", family = "serif"),
                               )+
-                        labs(title = "Mental Health issues"), 
+                        labs(title = "Increased Mental Health Issues"), 
                   agegroup_plot3 + 
                         theme(axis.text.x = element_text(family = "serif"),
                               axis.text.y = element_text(family = "serif"),
                               axis.ticks.y = element_blank(),
-                              axis.title.y = element_blank(),
+                              axis.title.y = element_text(family = "serif"),
                               axis.title.x = element_blank(),
                               legend.position = "none",
                               plot.title = element_text(hjust = 0.5, face = "bold", family = "serif")
            )+
-                        labs(title = "Time management"),
+                        labs(title = "Declined Sleep Management",
+                              y = "Proportion"),
                    agegroup_plot4 + 
                         theme(axis.text.x = element_text(family = "serif"),
                               axis.text.y = element_text(family = "serif"),
@@ -270,7 +273,7 @@ agegroupAnalysis_jordan <- cowplot::plot_grid(
                               legend.position = "none",
                               plot.title = element_text(hjust = 0.5, face = "bold", family = "serif"),
                              )+
-                          labs(title = "Social connection"),
+                          labs(title = "Declined Social Connection"),
                    nrow = 2,
                   rel_heights = c(1.5,1.5)
           
@@ -289,11 +292,13 @@ legend <- get_legend(
 
 
 # Combine combined plot and legend using plot_grid() 
-annotate_figure(plot_grid(agegroupAnalysis_jordan, legend,ncol=1,rel_heights = c(1, .1)), top = text_grob("COVID-19 Education Responses by Age Group in Columbia", 
+annotate_figure(plot_grid(agegroupAnalysis_jordan, legend,ncol=1,rel_heights = c(1, .1)), top = text_grob("COVID-19 Education Responses by Age Group in Jordan", 
               size = 14, face = "bold", 
-              family = "serif"))
+              family = "serif",
+              vjust = 0.2, hjust = 0.5))
                   
 ```
+
 
 ## Question 2
 
