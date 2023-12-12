@@ -1,12 +1,19 @@
 project:
   type: website
+  output-dir: docs
 
 website:
   title: "Final Project"
   navbar:
     left:
+      - href: index.qmd
+        text: Abstract
       - href: about.qmd
         text: Project
+    right:
+      - icon: github
+        href: https://github.com/AviannaBui/website_project_212
+        
 format:
   html:
     theme: flatly
