@@ -10,6 +10,8 @@ website:
         text: Abstract
       - href: about.qmd
         text: Project
+      - href: sources.qmd
+        text: Data Sources
     right:
       - icon: github
         href: https://github.com/AviannaBui/website_project_212
