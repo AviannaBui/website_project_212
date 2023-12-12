@@ -3,15 +3,6 @@ title: "Building Edtech for Mental Wellbeing"
 subtitle: "By Na & Avianna"
 ---
 
-Throughout and in the aftermath of the COVID-19 pandemic, there has been a notable shift towards incorporating technology into education. While educational technology has increased accessibility and flexibility in uncertain times, there are potential consequences due to the inherent lack of social connection and physical activities in online learning. In this project, we aim to investigate this increasing prevalence of educational technology and their impact on the well-being of individuals within this evolving educational landscape.
-
-## Research Questions
-
-To examine the impact of educational technological tools on students' well-being, we explore three questions:
-
-1.  Is there any age group that is more negatively affected by COVID-19?
-2.  How do digital learning tools affect university students mental well being?
-3.  Is there universality in terms of these elements?
 
 ### Question 1: Which age group is most heavily impacted?
 
@@ -609,13 +600,4 @@ ggplot() +
 
 ### Question 3: Is there universality across the datasets?
 
-## Future Directions
 
-## Limitations & Ethical Considerations
-
-All datasets utilize a survey format, which is highly subjective and might lead to unreliable results. In addition, due to the cross-sectional design, we are unable to infer the causal impact and changes over time when it comes to the relationship between edtech and mental well-being. 
-
-More importantly, the students participating in these surveys are not representative of the wider student populations in these three countries. First, some survey questions ignore the experiences of students from marginalized communities e.g. the Jordanian and Colombian datasets only recorded binary gender in their questionnaire, effectively excluding those identifying as non-binary or just not subscribing to a binary gender framework. Second, since the surveys are collected online, students from disadvantaged socioeconomic backgrounds with no or unreliable access to Internet or online learning tools are either excluded or not well-represented in these results. However, it is these individuals that are more susceptible to both physical and mental health risks during the COVID-19 pandemic and are more likely to struggle with the transition to online learning. For that reason, we need to be mindful and inclusive of the perspectives of students without access to a platform to share their experiences when advocating for their educational needs and designing a more accessible and considerate online learning tools and environment. 
-
-
-## Conclusion

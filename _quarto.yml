@@ -3,15 +3,18 @@ project:
   output-dir: docs
 
 website:
-  title: "Final Project"
+  title: "Building Edtech for Mental Wellbeing"
   navbar:
     left:
       - href: index.qmd
         text: Abstract
       - href: about.qmd
-        text: Project
+        text: Findings
+      - href: conclusions.qmd
+        text: Future Directions and Limitations
       - href: sources.qmd
         text: Data Sources
+        
     right:
       - icon: github
         href: https://github.com/AviannaBui/website_project_212
