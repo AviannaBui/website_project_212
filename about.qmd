@@ -5,7 +5,7 @@ subtitle: "By Na & Avianna"
 
 Throughout and in the aftermath of the COVID-19 pandemic, there has been a notable shift towards incorporating technology into education. While educational technology has increased accessibility and flexibility in uncertain times, there are potential consequences due to the inherent lack of social connection and physical activities in online learning. In this project, we aim to investigate this increasing prevalence of educational technology and their impact on the well-being of individuals within this evolving educational landscape. 
 
-# Research Questions 
+## Research Questions 
 
 To examine the impact of educational technological tools on students' well-being, we explore three questions:
 
@@ -13,7 +13,7 @@ To examine the impact of educational technological tools on students' well-being
   2. How do digital learning tools affect university students mental well being?
   3. Is there universality in terms of these elements?
 
-## Question 1: Which age group is most heavily impacted?
+### Question 1: Which age group is most heavily impacted?
 
 ```{r, message=F, include = F}
 library(tidyverse)
@@ -300,11 +300,27 @@ annotate_figure(plot_grid(agegroupAnalysis_jordan, legend,ncol=1,rel_heights = c
 ```
 
 
-## Question 2: How do digital learning tools affect university students mental well being?
+### Question 2: How do digital learning tools affect university students mental well being?
 
 There are 3 key themes relating to mental health and digital learning tools that arise from our datasets: Average time spent on online learning platforms, Level of social connection, and Level of comfortability with online classes. We find this overlap from 3 different universities in 3 different countries worthy of further investigation, even though each theme might not be presented in all 3 datasets. In visualizing the correlation between university student mental health status and these pressure points, we found insights that can inform the current status of digital learning tools. 
 
-### 1. Time Spent on Online Class
+#### 1. Time Spent on Online Class (no data from Colombia)
+
+Contrary to our hypothesis, there is a negative relationship between the number of hours Delhi college students spent online and reported health issue. Among college students that did report health problems, most spent under 4 hours for online learning.
+
+```{r, message = F, warning = F, echo = FALSE}
+delhi_college %>%
+  group_by(time_online, `Health issue during lockdown`) %>%
+  summarize(n = n()) %>%
+  mutate(freq = n/sum(n)) %>%
+  ggplot(aes(x=time_online, y=`Health issue during lockdown`, size  = freq)) +
+  geom_point(alpha = 0.9, color = "#aabf67") +
+  labs(x = "Hours Spent Online", title = "Time Spent on Online Learning vs. Health in Delhi College Students", size = "Frequency") +
+  scale_size_continuous(range = c(3, 10)) +
+  theme_minimal() +
+  theme(panel.grid.major = element_line(color = "grey")) +
+  theme_customization_b
+```
 
 In responding to how digital learning tools affect their mental wellbeing, Jordan college students overwhelmingly reported with exhaustion the more they spend using digital education platforms on a daily basis. This correlation between exhaustion and average daily digital use only amplifies after COVID-19. In details, before COVID-19, around 42% of all Jordan University students, who spent 1-3 hours daily on digital learning platforms, agreed that they are exhausted due to the use of digital learning tools. After COVID-19, Jordan students spend more time using digital learning tools daily, with 30% of them having a 3-6 average daily use and 26% of them having a 6-9 average daily use, all of whom agreed that they endure exhaustion because of digital learning tools. It is special to note that there were no students who spend more than 12 hours daily on digital learning tools that reported no exhaustion after COVID-19. 
 
@@ -354,7 +370,6 @@ test3<- test3 %>%
 ```
   
 
-
 ```{r, echo= FALSE, warning= FALSE }
 
 test3 %>% 
@@ -376,6 +391,20 @@ test3 %>%
   scale_size(range = c(0,9) , breaks = seq(0.0, 0.8,by = 0.1)) +
   guides(alpha = FALSE) 
 
+```
+
+#### 2. Social Connection
+
+```{r, warning = FALSE, echo = FALSE}
+delhi_college %>%
+   ggplot() +
+   geom_mosaic(aes(weight = 1, x = product(social), fill = health), na.rm = TRUE) +
+   geom_mosaic_text(aes(x = product(social), fill = health)) +
+    labs(title = "Social Connection vs. Health Among Delhi College Students", x = "Improved Social Connection", y = "Health Issue during Lockdown", fill = "Health Issue during Lockdown") +
+    scale_fill_manual(values = c("#621713", "#aabf67")) +
+    theme_classic() +
+    theme(legend.position = "bottom") +
+    theme_customization_b
 ```
 
 ```{r, echo = FALSE, warning = FALSE}
@@ -412,11 +441,88 @@ jordan_uni_mentalHealth %>%
         legend.text = element_text(family = "serif"))
 ```
 
+```{r, warning = F, echo = FALSE}
+colombia %>%
+  ggplot(aes(x = commu, y = `13.6 How happy are you with:\r\nYour health overall`)) +
+    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
+    geom_boxplot(fill = "#de5d83", width = 0.2) +
+    labs(x = 'Satisfaction with Social Communication', y = 'Health Satisfaction Rating', title = 'Correlation between Good Social Communication and Well-being in Colombian Students') + 
+    theme_classic() +
+    theme_customization_b
+```
 
-## Question 3
+#### 3. Online Class Comfortability
 
-# Limitations & Ethical Considerations
+```{r, warning = FALSE, echo = FALSE}
+comfort_filtered <- function(data, comfort_var, mh_var, comfort_var_resp,  mh_var_resp) {
+  count <- data %>% 
+    filter( {{comfort_var}} == comfort_var_resp) %>% 
+    filter( {{mh_var}} == mh_var_resp) %>% 
+    nrow()
+  
+  filtered_data <- data %>% 
+    filter({{comfort_var}} == comfort_var_resp) %>% 
+    filter({{mh_var}} == mh_var_resp) %>% 
+    mutate(x = case_when(
+      mh_var_resp == "YES" ~ runif(count, 0.05, 1.85),
+      mh_var_resp == "NO" ~ runif(count, 2.05,3.85)
+    )) %>% 
+    mutate(y = case_when( 
+      comfort_var_resp == "Positive" ~ runif(count, 4.05, 5.85),
+      comfort_var_resp == "Neutral" ~ runif(count, 2.05, 3.85),
+      comfort_var_resp == "Negative" ~  runif(count, 0.05, 1.85)))
+  
+  return(filtered_data)
+}
 
-# Conclusion
+perc_calc_delhi <- function(df) {
+    perc <- as.character(round(nrow(df) * 100 / nrow(delhi_college), 1))
+    return (paste(perc, "%"))
+}
+
+YesPos <- comfort_filtered(delhi_college, new_rating, health, "Positive", "YES")
+YesNeu <- comfort_filtered(delhi_college, new_rating, health, "Neutral", "YES" )
+YesNeg <- comfort_filtered(delhi_college, new_rating, health, "Negative", "YES")
+NoPos <- comfort_filtered(delhi_college, new_rating, health, "Positive", "NO")
+NoNeu <- comfort_filtered(delhi_college, new_rating, health, "Neutral", "NO")
+NoNeg <- comfort_filtered(delhi_college, new_rating, health, "Negative", "NO")
+
+ggplot() +
+  geom_point(data = YesPos, aes(x=x, y=y), color = "#aef359", alpha = .8, size = 2) +
+  geom_point(data = YesNeu, aes(x=x,y=y), color = "#aabf67", alpha = .8,size = 2) +
+  geom_point(data = YesNeg, aes(x=x,y=y), color = "#253e23", alpha = .8, size = 2) +
+  geom_point(data = NoPos, aes(x=x,y=y), color = "pink", alpha = .8, size = 2) +
+  geom_point(data = NoNeu, aes(x=x,y=y), color = "#dc143c", alpha = .8, size = 2) +
+  geom_point(data = NoNeg, aes(x=x,y=y), color = "#621713", alpha = .8, size = 2) +
+  geom_hline(aes(yintercept = 2), size = .3) +
+  geom_hline(aes(yintercept = 4), size = .3) +
+  geom_vline(aes(xintercept = 2), size = .3) + 
+  labs(title = "Online Class Rating vs. Health Issues in Delhi College Students", 
+       subtitle = "One dot = one case", x = "Health Issue", y = "Online Class Rating") +
+  annotate("text", x = c(1, 3), y = -0.2, label = c("YES", "NO"), size = 4, family = "serif") +
+  annotate("text", x = -0.2, y = c(1,3,5), label = c("Negative", "Neutral", "Positive"), size = 4, family = "serif", angle = 90) +
+  annotate("label", x = 1, y = c(1,3,5), label = c(perc_calc_delhi(YesNeg), perc_calc_delhi(YesNeu), perc_calc_delhi(YesPos)), size = 4, family = "serif", fill = "white") +
+  annotate("label", x = 3, y = c(1,3,5), label = c(perc_calc_delhi(NoNeg), perc_calc_delhi(NoNeu), perc_calc_delhi(NoPos)), size = 4, family = "serif", fill = "white") +
+  theme_classic() +
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), 
+        axis.line = element_blank()) +
+  theme_customization_b
+```
+
+```{r, echo = FALSE}
+colombia %>%
+  ggplot(aes(x = onl_class, y = `13.6 How happy are you with:\r\nYour health overall`)) +
+    ggdist::stat_halfeye(fill = "#f99fbe", color = NA, alpha = 0.5) +
+    geom_boxplot(fill = "#de5d83", width = 0.2) +
+    labs(x = 'Online Class Comfortability', y = 'Health Satisfaction Rating', title = 'Correlation between Online Class Comfortability and Well-being in Colombian Students') + 
+    theme_classic() +
+    theme_customization_b
+```
+
+### Question 3: Is there universality across the datasets?
+
+## Limitations & Ethical Considerations
+
+## Conclusion
 
 
