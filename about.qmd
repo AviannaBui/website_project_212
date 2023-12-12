@@ -300,7 +300,13 @@ annotate_figure(plot_grid(agegroupAnalysis_jordan, legend,ncol=1,rel_heights = c
 ```
 
 
-## Question 2
+## Question 2: How do digital learning tools affect university students mental well being?
+
+There are 3 key themes relating to mental health and digital learning tools that arise from our datasets: Average time spent on online learning platforms, Level of social connection, and Level of comfortability with online classes. We find this overlap from 3 different universities in 3 different countries worthy of further investigation, even though each theme might not be presented in all 3 datasets. In visualizing the correlation between university student mental health status and these pressure points, we found insights that can inform the current status of digital learning tools. 
+
+### 1. Time Spent on Online Class
+
+In responding to how digital learning tools affect their mental wellbeing, Jordan college students overwhelmingly reported with exhaustion the more they spend using digital education platforms on a daily basis. This correlation between exhaustion and average daily digital use only amplifies after COVID-19. In details, before COVID-19, around 42% of all Jordan University students, who spent 1-3 hours daily on digital learning platforms, agreed that they are exhausted due to the use of digital learning tools. After COVID-19, Jordan students spend more time using digital learning tools daily, with 30% of them having a 3-6 average daily use and 26% of them having a 6-9 average daily use, all of whom agreed that they endure exhaustion because of digital learning tools. It is special to note that there were no students who spend more than 12 hours daily on digital learning tools that reported no exhaustion after COVID-19. 
 
 ```{r, include = F}
 
@@ -317,19 +323,25 @@ beforecovid_data <- jordan_uni_mentalHealth %>%
   mutate(covid_techuse = factor(`Before COVID-19: How much time do you spend using the digital tools in learning?`,hours_factored)) %>% 
   mutate(covid_exhaustion_screens = 
     `Before COVID-19: Continuous exposure to electronic screens in online learning is tiring and exhausting`
-    ) %>% 
+    ) %>%  
+  mutate(covid_exhaustion_screens = case_when(
+    covid_exhaustion_screens == "Agree" | covid_exhaustion_screens == "Strongly Agree" ~ "YES",
+    covid_exhaustion_screens == "Disagree" | covid_exhaustion_screens == "Disagree" ~ "NO",
+  )) %>% 
   count(covid_exhaustion_screens, covid_techuse) %>% 
-  group_by(covid_techuse) %>% 
   mutate(`Before COVID-19` = n /sum(n))
 
 aftercovid_data<- jordan_uni_mentalHealth %>%
   mutate(covid_techuse = factor(`After COVID-19: How much time do you spend using the digital tools in learning?`,hours_factored)) %>% 
-  mutate(covid_exhaustion_screens = 
+  mutate(covid_exhaustion_screens =
     `After COVID-19: Continuous exposure to electronic screens in online learning is tiring and exhausting`
-    ) %>% 
-  count(covid_exhaustion_screens, covid_techuse) %>%  # Count occurrences within groups
-  group_by(covid_techuse) %>%
-  mutate(`After COVID-19` = n / sum(n))
+    ) %>%  
+  mutate(covid_exhaustion_screens = case_when(
+    covid_exhaustion_screens == "Agree" | covid_exhaustion_screens == "Strongly Agree" ~ "YES",
+    covid_exhaustion_screens == "Disagree" | covid_exhaustion_screens == "Disagree" ~ "NO",
+  )) %>% 
+  count(covid_exhaustion_screens, covid_techuse) %>% 
+  mutate(`After COVID-19` = n /sum(n))
   
 
 test3 <- full_join(beforecovid_data, aftercovid_data, by = c("covid_techuse", "covid_exhaustion_screens")) %>%  select(covid_exhaustion_screens, covid_techuse, `Before COVID-19`, `After COVID-19`)
@@ -340,14 +352,12 @@ test3<- test3 %>%
 
 
 ```
+  
+
 
 ```{r, echo= FALSE, warning= FALSE }
 
 test3 %>% 
-   mutate(covid_exhaustion_screens = case_when(
-    covid_exhaustion_screens == "Agree" | covid_exhaustion_screens == "Strongly Agree" ~ "YES",
-    covid_exhaustion_screens == "Disagree" | covid_exhaustion_screens == "Disagree" ~ "NO",
-  )) %>% 
   filter(!is.na(covid_exhaustion_screens)) %>% 
   ggplot()+
   geom_point(aes(y = factor(covid_exhaustion_screens, c("NO", "YES")), x = covid_techuse, size = Frequency), color ="#FF8F05") +
@@ -361,9 +371,9 @@ test3 %>%
         axis.text.x = element_text(family = "serif"),
         axis.title.x = element_text(family = "serif"),
         legend.title = element_text(family = "serif"),
-        legend.text = element_text(family = "serif"),
-        plot.title = element_text(face = "bold",  hjust = 0.5, family = "serif"))+ 
-  scale_size(range = c(0,9) , breaks = seq(0.0, 0.8,by = 0.2)) +
+        legend.text = element_text(family = "serif", size = 8.5),
+        plot.title = element_text(face = "bold",  hjust = 0.2, family = "serif"))+ 
+  scale_size(range = c(0,9) , breaks = seq(0.0, 0.8,by = 0.1)) +
   guides(alpha = FALSE) 
 
 ```
@@ -394,11 +404,13 @@ jordan_uni_mentalHealth %>%
         fill = "Rating",
         title = "Increased Isolation Due To Online Class versus Mental Health Issues Rating",
         subtitle = "In Jordan University Students") +
-  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle =element_text(size = 10, hjust = 0.5))
+  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5, family = "serif"),
+        plot.subtitle =element_text(size = 10, hjust = 0.5, family = "serif"),
+        axis.title = element_text(family = "serif"),
+        axis.text = element_text( family = "serif"),
+        legend.title = element_text(family = "serif"),
+        legend.text = element_text(family = "serif"))
 ```
-
-
 
 
 ## Question 3
