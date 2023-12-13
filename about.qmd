@@ -600,4 +600,21 @@ ggplot() +
 
 ### Question 3: Is there universality across the datasets?
 
+#### Age Group
+
+Throughout 3 datasets, the age group of 18-24 seems to be the most vulnerable demographic when it comes to a complete transition to digital learning platforms in the context of higher education.
+
+#### Time spent online
+
+There are differing conclusions of correlations between time spent learning online and mental health. Even though the Jordan dataset suggests a positive relationship, that is not the case with Delhi university students. Furthermore, there is no reported case in the Columbia dataset. Yet, this should still be a pressure point worthy of consideration.
+
+#### Social connection
+
+It is clear that all 3 datasets suggest that college students with improved social connection also have better well-being. This positive relationship suggests that this is a paint point for education technology. 
+
+#### Online class comfortability
+
+Similarly, across all 3 datasets, students who experience health issues tend to have a negative attitude towards online class comfortability. We also believe that education technology designers should pay great attention to this pressure point in order to beter facilitate learning for university students. 
+
+
 
